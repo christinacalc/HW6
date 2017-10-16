@@ -8,20 +8,31 @@
 import urllib.request, urllib.parse, urllib.error
 from bs4 import BeautifulSoup
 import ssl
+import re
 
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+url_list= []
 url = input('Enter - ')
-html = urllib.request.urlopen(url, context=ctx).read()
-soup = BeautifulSoup(html, 'html.parser')
+n= 0
 
-# Retrieve all of the anchor tags
-tags = soup('a')
-for tag in tags:
-    print(tag.get('href', None))
+while n < 7:
+	lst_of_tags= []
+	html = urllib.request.urlopen(url).read()
+	soup = BeautifulSoup(html, 'html.parser')
+	tags = soup('a')
 
-while n < 4:
-	
+	for i in range(8):
+		for each in tags:
+			lst_of_tags.append(each)	
+
+	url= lst_of_tags[17].get('href', None)
+	url_list.append(url)
+
+	n= n+1
+
+end= re.findall('by_([^ ]*).html', url)
+print("The answer is: " + end[0])
